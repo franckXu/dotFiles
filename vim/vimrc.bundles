@@ -16,8 +16,8 @@ filetype off " required! turn off
 
 " inspired by spf13, 自定义需要的插件集合
 if !exists('g:bundle_groups')
-    " let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css', 'tmux', 'beta', 'json', 'nginx', 'golang', 'ruby', 'less', 'php', 'coffeescript','typescript']
-    let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css',  'beta' , 'less','typescript']
+    " let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css', 'tmux', 'beta', 'json', 'nginx', 'golang', 'ruby', 'less', 'php', 'coffeescript']
+    let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css',  'beta' , 'less','typescript','php']
 endif
 
 " ----------------------------------------------------------------------------
@@ -30,7 +30,7 @@ call plug#begin('$VIM/bundle')
 " 移动光标到插件名上, 使用'#'快速跳转到每个插件的配置处
 
 " syntastic
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
 
 " Group dependencies, vim-snippets depends on ultisnips
 " 代码片段快速插入 (snippets中,是代码片段资源,需要学习)
@@ -186,6 +186,8 @@ if count(g:bundle_groups, 'python')
     Plug 'hdima/python-syntax'
     Plug 'hynek/vim-python-pep8-indent'
     Plug 'Glench/Vim-Jinja2-Syntax'
+    " Plug 'tell-k/vim-autopep8'
+
 endif
 
 if count(g:bundle_groups, 'php')
@@ -215,12 +217,39 @@ if count(g:bundle_groups, 'javascript')
     " for javascript 自动补全, 配合YCM, 需要安装全局环境的（非nvm中) node.js&npm
     " 安装完成后还需要在 bundle/tern_for_vim 下执行 npm install 安装依赖
     " see https://github.com/marijnh/tern_for_vim
-    Plug 'marijnh/tern_for_vim'
+    " Plug 'marijnh/tern_for_vim'
+    " Plug 'maksimr/vim-jsbeautify'
+
+
+    Plug 'w0rp/ale'
+    let g:ale_fixers = {}
+    let g:ale_fixers['javascript'] = ['prettier']
+    " let g:ale_javascript_prettier_use_local_config = 1
+    "
+    " python format not use ale
+    let g:ale_fixers['python'] = ['autopep8']
+    " let g:ale_warn_about_trailing_whitespace = 0
+    let g:ale_fixers['scss'] = ['prettier']
+
+    let g:ale_linters = {}
+    let g:ale_linters['javascript'] = [ 'eslint']
+    let g:ale_linters['python'] = ['flake8']
+    let g:ale_linters['scss'] = ['stylelint']
+
+
+" Suggested Fixers:
+"   'prettier' - Apply prettier to a file.
+"   'remove_trailing_lines' - Remove all blank lines at the end of a file.
+"   'stylelint' - Fix stylesheet files using stylelint --fix.
+"   'trim_whitespace' - Remove all trailing whitespace characters at the end of every line.
+
+
+    let g:ale_fix_on_save = 1
+
+
 endif
 
 if count(g:bundle_groups,'typescript')
-  " Plug 'Shougo/vimproc.vim'
-  " Plug  'quramy/tsuquyomi'
   Plug 'leafgarland/typescript-vim'
 endif
 
@@ -244,8 +273,8 @@ endif
 
 if count(g:bundle_groups, 'less')
     " ###### vim.less : less 自动更新##########
-    Plug 'groenewege/vim-less'
-    autocmd BufWritePost *.less :!lessc % > %:p:r.css
+    " Plug 'groenewege/vim-less'
+    " autocmd BufWritePost *.less :!lessc % > %:p:r.css
 endif
 
 if count(g:bundle_groups, 'html')
@@ -261,14 +290,7 @@ endif
 " this is just for beta version
 if count(g:bundle_groups, 'beta')
     " indent
-    Plug 'nathanaelkane/vim-indent-guides'
-    " <leader>ig to trigger
-    let g:indent_guides_start_level = 2
-    let g:indent_guides_guide_size = 1
-    let g:indent_guides_auto_colors = 0
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=black
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=black
-
+    Plug 'Yggdroot/indentLine'
 endif
 
 
@@ -301,8 +323,7 @@ call plug#end()
     " let g:syntastic_python_checkers=['pylint'] " 使用pyflakes,速度比pylint快
     " let g:syntastic_python_pylint_args='--disable=C0111,R0903,C0301'
 
-    " if js
-    " let g:syntastic_javascript_checkers = ['jsl', 'jshint']
+    let g:syntastic_javascript_checkers = ['jshint']
     " let g:syntastic_html_checkers=['tidy', 'jshint']
 
     " to see error location list
@@ -394,6 +415,7 @@ call plug#end()
         \ 'tagbar' : 1,
         \ 'gitcommit' : 1,
         \}
+
 " }}}
 
 
@@ -523,7 +545,7 @@ call plug#end()
       " \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
       " \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
       " \ }
-    let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
+    let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist|env)|(\.(swp|ico|git|svn))$'
 
     let g:ctrlp_working_path_mode=0
     let g:ctrlp_match_window_bottom=1
@@ -555,7 +577,7 @@ call plug#end()
 " ctrlsf {{{
     let g:ctrlsf_ackprg = 'ag'
     nmap \ <Plug>CtrlSFCwordPath<CR>
-    let g:ctrlsf_ignore_dir = ["node_modules","www\lib"]
+    let g:ctrlsf_ignore_dir = ["node_modules","env"]
     " let g:ctrlsf_position = 'below'
     " let g:ctrlsf_winsize = '30%'
     let g:ctrlsf_auto_close = 0
@@ -798,6 +820,10 @@ call plug#end()
     let g:html_indent_style1 = "inc"
 " }}}
 
+" typescript{{{
+"
+" }}}
+
 " json {{{
     let g:vim_json_syntax_conceal = 0
 " }}}
@@ -814,7 +840,7 @@ call plug#end()
 " beta {{{
     " python code format
     " format all file
-    autocmd FileType python nnoremap <leader>y :0,$!yapf<Cr>
+    " autocmd FileType python nnoremap <leader>y :0,$!yapf<Cr>
     " format select block
     " autocmd FileType python vnoremap <leader>y :!yapf<Cr>
 
