@@ -1,0 +1,28 @@
+{
+  "ecmaVersion": 6,
+  "libs": [
+    "ecma5",
+    "ecma6",
+    "browser",
+     "jquery",
+     "react",
+     "underscore",
+     "chai"
+  ],
+  "loadEagerly": [],
+  "dontLoad": [],
+  "async": true,
+  "plugins": {
+    "doc_comment": {
+      "fullDocs": true,
+      "strong": true
+    },
+    "complete_strings": {},
+    "es_modules": {},
+    "modules": {},
+    "node": {},
+    "commonjs": {},
+    "node_resolve":{},
+    "angular": {}
+  }
+}
