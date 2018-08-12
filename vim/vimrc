@@ -53,7 +53,7 @@ filetype plugin indent on
 
 
 " history存储容量
-set history=2000
+set history=2101
 
 " 检测文件类型
 filetype on
@@ -697,7 +697,3 @@ highlight clear SpellRare
 highlight SpellRare term=underline cterm=underline
 highlight clear SpellLocal
 highlight SpellLocal term=underline cterm=underline
-
-
-
-
