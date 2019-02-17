@@ -41,7 +41,7 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 " 代码自动补全
 " 迄今为止用到的最好的自动VIM自动补全插件
 " 重启 :YcmRestartServer
-Plug 'Valloric/YouCompleteMe'
+" Plug 'Valloric/YouCompleteMe'
 " 自动补全单引号，双引号等
 Plug 'Raimondi/delimitMate'
 " 自动补全html/xml标签
@@ -627,16 +627,21 @@ call plug#end()
 " ################### 显示增强 ###################
 
 " airline {{{
-    let g:airline_powerline_fonts = 1
+    " on macvim has bug
+    " let g:airline_powerline_fonts = 1
+
     if !exists('g:airline_symbols')
         let g:airline_symbols = {}
     endif
-    " let g:airline_left_sep = '▶'
-    " let g:airline_left_alt_sep = '❯'
-    " let g:airline_right_sep = '◀'
-    " let g:airline_right_alt_sep = '❮'
-    " let g:airline_symbols.linenr = '¶'
-    " let g:airline_symbols.branch = '⎇'
+
+    if has("unix")
+        let g:airline_left_sep = '▶'
+        let g:airline_left_alt_sep = '❯'
+        let g:airline_right_sep = '◀'
+        let g:airline_right_alt_sep = '❮'
+        let g:airline_symbols.linenr = '¶'
+        let g:airline_symbols.branch = '⎇'
+    endif
 
     " 是否打开tabline
     " let g:airline#extensions#tabline#enabled = 1

@@ -75,12 +75,22 @@ set noswapfile
 
 " set noundofile
 set undofile
-set undodir=$HOME\.vim\undofile
+if has("unix")
+    set undodir=$HOME/.vim/undofile
+else
+    set undodir=$HOME\.vim\undofile
+endif
+
 
 " 备份,到另一个位置. 防止误删, 目前是取消备份
 " set nobackup
 set backupext=.bak
-set backupdir=$HOME\.vim\bak
+if has("unix")
+    set backupdir=$HOME/.vim/bak
+else
+    set backupdir=$HOME\.vim\bak
+endif
+
 
 " TODO: remove this, use gundo
 " create undo file
@@ -657,7 +667,7 @@ endif
 
 " Set extra options when running in GUI mode
 if has("gui_running")
-    " set guifont=Monaco:h14
+    set guifont=Monaco:h14
     if has("win32") || has("win64")
         set guifont=Consolas:h12
     elseif has("gui_gtk2")   "GTK2
@@ -677,7 +687,7 @@ endif
 
 
 " theme主题
-" set background=dark
+set background=dark
 " set t_Co=256
 
 colorscheme solarized
