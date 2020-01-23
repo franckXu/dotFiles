@@ -75,12 +75,22 @@ set noswapfile
 
 " set noundofile
 set undofile
-set undodir=$HOME\.vim\undofile
+if has("unix")
+    set undodir=$HOME/.vim/undofile
+else
+    set undodir=$HOME\.vim\undofile
+endif
+
 
 " 备份,到另一个位置. 防止误删, 目前是取消备份
 " set nobackup
 set backupext=.bak
-set backupdir=$HOME\.vim\bak
+if has("unix")
+    set backupdir=$HOME/.vim/bak
+else
+    set backupdir=$HOME\.vim\bak
+endif
+
 
 " TODO: remove this, use gundo
 " create undo file
@@ -272,7 +282,7 @@ source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 language messages zh_CN.utf-8
 set helplang=cn
-" set langmenu=zh_CN.UTF-8
+" set langmenu=zh_CN.UTF-8
 "set enc=2byte-gb18030
 " 下面这句只影响普通模式 (非图形界面) 下的 Vim
 set termencoding=utf-8
@@ -579,7 +589,6 @@ autocmd FileType python set tabstop=4 shiftwidth=4 expandtab ai
 " autocmd FileType ruby,javascript,html,css,xml set tabstop=2 shiftwidth=2 softtabstop=2 expandtab ai
 autocmd BufRead,BufNewFile *.md,*.mkd,*.markdown set filetype=markdown.mkd
 autocmd BufRead,BufNewFile *.part set filetype=html
-autocmd BufRead,BufNewFile *.svg set filetype=xml
 " disable showmatch when use > in php
 au BufWinEnter *.php set mps-=<:>
 
@@ -658,14 +667,12 @@ endif
 
 " Set extra options when running in GUI mode
 if has("gui_running")
-    " set guifont=Monaco:h14
+    set guifont=Monaco:h14
     if has("win32") || has("win64")
-        " set guifont=Consolas:h12
-        set guifont=Cascadia_Code:h12
+        set guifont=Consolas:h12
     elseif has("gui_gtk2")   "GTK2
         set guifont=Monaco\ 12,Monospace\ 12
     endif
-
     set guioptions-=T
     set guioptions+=e
     set guioptions-=r
@@ -675,21 +682,13 @@ if has("gui_running")
     set linespace=2
     set noimd
     set t_Co=256
-
-    " theme主题
-    set background=dark
-    set background=light
-    " set t_Co=256
-else
-    " theme主题
-    set background=dark
-    " set background=light
-    set t_Co=256
-
 endif
 
 
 
+" theme主题
+set background=dark
+" set t_Co=256
 
 colorscheme solarized
 " colorscheme molokai
@@ -710,3 +709,8 @@ highlight clear SpellRare
 highlight SpellRare term=underline cterm=underline
 highlight clear SpellLocal
 highlight SpellLocal term=underline cterm=underline
+
+
+" set the default size of new windows
+set lines=40
+set columns=200
