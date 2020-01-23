@@ -46,6 +46,8 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'Raimondi/delimitMate'
 " 自动补全html/xml标签
 Plug 'docunext/closetag.vim'
+" Coc is an intellisense engine for vim8 & neovim. It only works on vim >= 8.1 and neovim >= 0.3.1
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
 " quick edit
 " 快速注释
@@ -220,6 +222,9 @@ if count(g:bundle_groups, 'javascript')
     " Plug 'marijnh/tern_for_vim'
     " Plug 'maksimr/vim-jsbeautify'
 
+    " Enable completion where available.
+    " This setting must be set before ALE is loaded.
+    " let g:ale_completion_enabled = 1
 
     Plug 'w0rp/ale'
     let g:ale_fixers = {}
@@ -230,11 +235,16 @@ if count(g:bundle_groups, 'javascript')
     let g:ale_fixers['python'] = ['autopep8']
     " let g:ale_warn_about_trailing_whitespace = 0
     let g:ale_fixers['scss'] = ['prettier']
+    let g:ale_fixers['typescript'] = ['prettier']
+    let g:ale_fixers['xml'] = ['xmllint']
+    " trim_whitespace
 
     let g:ale_linters = {}
     let g:ale_linters['javascript'] = [ 'eslint']
     let g:ale_linters['python'] = ['flake8']
     let g:ale_linters['scss'] = ['stylelint']
+    let g:ale_linters['typescript'] = ['tsserver','tslint']
+
 
 
 " Suggested Fixers:
@@ -251,6 +261,8 @@ endif
 
 if count(g:bundle_groups,'typescript')
   Plug 'leafgarland/typescript-vim'
+  " Plug 'ianks/vim-tsx'
+    Plug 'peitalin/vim-jsx-typescript'
 endif
 
 if count(g:bundle_groups, 'coffeescript')
@@ -259,7 +271,7 @@ endif
 
 if count(g:bundle_groups, 'json')
     " json
-    Plug 'elzr/vim-json', {'for': 'json'}
+    " Plug 'elzr/vim-json', {'for': 'json'}
 endif
 
 if count(g:bundle_groups, 'css')
@@ -280,6 +292,7 @@ endif
 if count(g:bundle_groups, 'html')
     " ###### emmet HTML complete #########
     Plug 'mattn/emmet-vim'
+    " Plug 'posva/vim-vue'
 endif
 
 if count(g:bundle_groups, 'nginx')
@@ -414,6 +427,7 @@ call plug#end()
     let g:ycm_filetype_blacklist = {
         \ 'tagbar' : 1,
         \ 'gitcommit' : 1,
+        \ 'txt' : 1,
         \}
 
 " }}}
@@ -464,6 +478,9 @@ call plug#end()
     let g:closetag_html_style=1
 " }}}
 
+" coc {{{
+
+" }}}
 " ################### 快速编码 ###################
 
 " nerdcommenter {{{
@@ -645,6 +662,9 @@ call plug#end()
 
     " 是否打开tabline
     " let g:airline#extensions#tabline#enabled = 1
+
+    " let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+    " let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 " }}}
 
 
