@@ -48,6 +48,8 @@ Plug 'Raimondi/delimitMate'
 Plug 'docunext/closetag.vim'
 " Coc is an intellisense engine for vim8 & neovim. It only works on vim >= 8.1 and neovim >= 0.3.1
 " Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+" coc.nvim
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " quick edit
 " 快速注释
@@ -94,7 +96,7 @@ Plug 'terryma/vim-multiple-cursors'
 " 文件搜索
 " change to https://github.com/ctrlpvim/ctrlp.vim
 " ctrlp ctrlpfunky
-Plug 'ctrlpvim/ctrlp.vim' | Plug 'tacahiroy/ctrlp-funky'
+" Plug 'ctrlpvim/ctrlp.vim' | Plug 'tacahiroy/ctrlp-funky'
 " ctrlsf
 " 类似sublimetext的搜索
 " In CtrlSF window:
@@ -108,6 +110,11 @@ Plug 'dyng/ctrlsf.vim'
 " map /  <Plug>(incsearch-forward)
 " map ?  <Plug>(incsearch-backward)
 " map g/ <Plug>(incsearch-stay)
+" fzf
+Plug 'junegunn/fzf'
+" vim-clap
+Plug 'liuchengxu/vim-clap'
+
 
 " quick run
 " quickrun
@@ -141,12 +148,19 @@ Plug 'tomasr/molokai'
 
 " nav
 " nerdtree nerdtreetabs
-Plug 'scrooloose/nerdtree'
+" Plug 'scrooloose/nerdtree'
 " Plug 'jistr/vim-nerdtree-tabs'
+Plug 'lambdalisue/fern.vim', { 'branch': 'main' }
+Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+Plug 'lambdalisue/nerdfont.vim'
+
 " ctrlspace
 Plug 'szw/vim-ctrlspace'
 " tagbar
-" Plug 'majutsushi/tagbar'
+" Plug 'preservim/tagbar'
+" vista
+Plug 'liuchengxu/vista.vim'
+
 
 " text object
 " 支持自定义文本对象
@@ -209,12 +223,12 @@ endif
 if count(g:bundle_groups, 'javascript')
     " javascript
     " 注意: syntax这个插件要放前面
-    Plug 'othree/yajs.vim' | Plug 'pangloss/vim-javascript'
+    " Plug 'othree/yajs.vim' | Plug 'pangloss/vim-javascript'
     " Plug 'jelera/vim-javascript-syntax' | Plug 'pangloss/vim-javascript'
 
     " TODO: jquery? for, remove or keep
-    Plug 'othree/javascript-libraries-syntax.vim'
-    let g:used_javascript_libs = 'jquery,underscore,backbone'
+    " Plug 'othree/javascript-libraries-syntax.vim'
+    " let g:used_javascript_libs = 'jquery,underscore,backbone'
 
     " for javascript 自动补全, 配合YCM, 需要安装全局环境的（非nvm中) node.js&npm
     " 安装完成后还需要在 bundle/tern_for_vim 下执行 npm install 安装依赖
@@ -235,7 +249,11 @@ if count(g:bundle_groups, 'javascript')
     let g:ale_fixers['python'] = ['autopep8']
     " let g:ale_warn_about_trailing_whitespace = 0
     let g:ale_fixers['scss'] = ['prettier']
+    let g:ale_fixers['less'] = ['prettier']
     let g:ale_fixers['typescript'] = ['prettier']
+    let g:ale_fixers['typescriptreact'] = ['prettier']
+    let g:ale_fixers['javascriptreact'] = ['prettier']
+    let g:ale_fixers['json'] = ['prettier']
     let g:ale_fixers['xml'] = ['xmllint']
     " trim_whitespace
 
@@ -243,7 +261,11 @@ if count(g:bundle_groups, 'javascript')
     let g:ale_linters['javascript'] = [ 'eslint']
     let g:ale_linters['python'] = ['flake8']
     let g:ale_linters['scss'] = ['stylelint']
-    let g:ale_linters['typescript'] = ['tsserver','tslint']
+    let g:ale_linters['less'] = ['stylelint']
+    let g:ale_linters['typescript'] = ['eslint','tsserver']
+    let g:ale_linters['typescriptreact'] = ['eslint','tsserver']
+    let g:ale_linters['javascriptreact'] = ['eslint','tsserver']
+    let g:ale_linters['json'] = ['eslint']
 
 
 
@@ -390,46 +412,198 @@ call plug#end()
 " ################### 自动补全 ###################
 
 " YouCompleteMe {{{
-    "youcompleteme  默认tab  s-tab 和自动补全冲突
-    "let g:ycm_key_list_select_completion=['<c-n>']
-    let g:ycm_key_list_select_completion = ['<Down>']
-    "let g:ycm_key_list_previous_completion=['<c-p>']
-    let g:ycm_key_list_previous_completion = ['<Up>']
-    let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
-    let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
-    let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
-    let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
-    let g:ycm_collect_identifiers_from_tags_files = 1
-    " 开启语法关键字补全
-    let g:ycm_seed_identifiers_with_syntax=1
+"     "youcompleteme  默认tab  s-tab 和自动补全冲突
+"     "let g:ycm_key_list_select_completion=['<c-n>']
+"     let g:ycm_key_list_select_completion = ['<Down>']
+"     "let g:ycm_key_list_previous_completion=['<c-p>']
+"     let g:ycm_key_list_previous_completion = ['<Up>']
+"     let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
+"     let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
+"     let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
+"     let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
+"     let g:ycm_collect_identifiers_from_tags_files = 1
+"     " 开启语法关键字补全
+"     let g:ycm_seed_identifiers_with_syntax=1
+"
+"     "let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
+"
+"     " 跳转到定义处, 分屏打开
+"     let g:ycm_goto_buffer_command = 'horizontal-split'
+"     " nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
+    " nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"     nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+"
+"     " 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
+"     " old version
+"     if !empty(glob("$VIM/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"))
+"         let g:ycm_global_ycm_extra_conf = "$VIM/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"
+"     endif
+"     " new version
+"     if !empty(glob("$VIM/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
+"         let g:ycm_global_ycm_extra_conf = "$VIM/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
+"     endif
+"
+"     " 直接触发自动补全 insert模式下
+"     " let g:ycm_key_invoke_completion = '<C-Space>'
+"     " 黑名单,不启用
+"     let g:ycm_filetype_blacklist = {
+"         \ 'tagbar' : 1,
+"         \ 'gitcommit' : 1,
+"         \ 'txt' : 1,
+"         \}
+"
+" }}}
 
-    "let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
 
-    " 跳转到定义处, 分屏打开
-    let g:ycm_goto_buffer_command = 'horizontal-split'
-    " nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
-    nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-    nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+" ultisnips {{{
+    " Some servers have issues with backup files, see #649.
+    set nobackup
+    set nowritebackup
 
-    " 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
-    " old version
-    if !empty(glob("$VIM/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"))
-        let g:ycm_global_ycm_extra_conf = "$VIM/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"
+    " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+    " delays and poor user experience.
+    set updatetime=300
+
+    " Always show the signcolumn, otherwise it would shift the text each time
+    " diagnostics appear/become resolved.
+    set signcolumn=yes
+
+    " Use tab for trigger completion with characters ahead and navigate.
+    " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+    " other plugin before putting this into your config.
+    inoremap <silent><expr> <TAB>
+          \ coc#pum#visible() ? coc#pum#next(1):
+          \ CheckBackspace() ? "\<Tab>" :
+          \ coc#refresh()
+    inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+    " Make <CR> to accept selected completion item or notify coc.nvim to format
+    " <C-g>u breaks current undo, please make your own choice.
+    inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                                  \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+    function! CheckBackspace() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+
+    " Use <c-space> to trigger completion.
+    if has('nvim')
+      inoremap <silent><expr> <c-space> coc#refresh()
+    else
+      inoremap <silent><expr> <c-@> coc#refresh()
     endif
-    " new version
-    if !empty(glob("$VIM/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
-        let g:ycm_global_ycm_extra_conf = "$VIM/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
+
+    " Use `[g` and `]g` to navigate diagnostics
+    " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+    nmap <silent> [g <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+    " GoTo code navigation.
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
+
+    " Use K to show documentation in preview window.
+    nnoremap <silent> K :call ShowDocumentation()<CR>
+
+    function! ShowDocumentation()
+      if CocAction('hasProvider', 'hover')
+        call CocActionAsync('doHover')
+      else
+        call feedkeys('K', 'in')
+      endif
+    endfunction
+
+    " Highlight the symbol and its references when holding the cursor.
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    " Symbol renaming.
+    nmap <leader>rn <Plug>(coc-rename)
+
+    " Formatting selected code.
+    xmap <leader>f  <Plug>(coc-format-selected)
+    nmap <leader>f  <Plug>(coc-format-selected)
+
+    augroup mygroup
+      autocmd!
+      " Setup formatexpr specified filetype(s).
+      autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+      " Update signature help on jump placeholder.
+      autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    augroup end
+
+    " Applying codeAction to the selected region.
+    " Example: `<leader>aap` for current paragraph
+    xmap <leader>a  <Plug>(coc-codeaction-selected)
+    nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+    " Remap keys for applying codeAction to the current buffer.
+    nmap <leader>ac  <Plug>(coc-codeaction)
+    " Apply AutoFix to problem on the current line.
+    nmap <leader>qf  <Plug>(coc-fix-current)
+
+    " Run the Code Lens action on the current line.
+    nmap <leader>cl  <Plug>(coc-codelens-action)
+
+    " Map function and class text objects
+    " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+    xmap if <Plug>(coc-funcobj-i)
+    omap if <Plug>(coc-funcobj-i)
+    xmap af <Plug>(coc-funcobj-a)
+    omap af <Plug>(coc-funcobj-a)
+    xmap ic <Plug>(coc-classobj-i)
+    omap ic <Plug>(coc-classobj-i)
+    xmap ac <Plug>(coc-classobj-a)
+    omap ac <Plug>(coc-classobj-a)
+
+    " Remap <C-f> and <C-b> for scroll float windows/popups.
+    if has('nvim-0.4.0') || has('patch-8.2.0750')
+      nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+      inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+      inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+      vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
     endif
 
-    " 直接触发自动补全 insert模式下
-    " let g:ycm_key_invoke_completion = '<C-Space>'
-    " 黑名单,不启用
-    let g:ycm_filetype_blacklist = {
-        \ 'tagbar' : 1,
-        \ 'gitcommit' : 1,
-        \ 'txt' : 1,
-        \}
+    " Use CTRL-S for selections ranges.
+    " Requires 'textDocument/selectionRange' support of language server.
+    nmap <silent> <C-s> <Plug>(coc-range-select)
+    xmap <silent> <C-s> <Plug>(coc-range-select)
 
+    " Add `:Format` command to format current buffer.
+    command! -nargs=0 Format :call CocActionAsync('format')
+
+    " Add `:Fold` command to fold current buffer.
+    command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+    " Add `:OR` command for organize imports of the current buffer.
+    command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+    " Add (Neo)Vim's native statusline support.
+    " NOTE: Please see `:h coc-status` for integrations with external plugins that
+    " provide custom statusline: lightline.vim, vim-airline.
+    set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+    " Mappings for CoCList
+    " Show all diagnostics.
+    nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+    " Manage extensions.
+    nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+    " Show commands.
+    nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+    " Find symbol of current document.
+    nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+    " Search workspace symbols.
+    nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+    " Do default action for next item.
+    nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+    " Do default action for previous item.
+    nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+    " Resume latest coc list.
+    nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 " }}}
 
 
@@ -553,48 +727,48 @@ call plug#end()
 " ################### 功能相关 ###################
 
 " ctrlp ctrlpfunky{{{
-    let g:ctrlp_map = '<leader>p'
-    let g:ctrlp_cmd = 'CtrlP'
-    map <leader>f :CtrlPMRU<CR>
-
-    " 无法找到在配置对象写法下的忽略node_modules的写法，故注释
-    " let g:ctrlp_custom_ignore = {
-      " \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
-      " \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
-      " \ }
-    let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist|env)|(\.(swp|ico|git|svn))$'
-
-    let g:ctrlp_working_path_mode=0
-    let g:ctrlp_match_window_bottom=1
-    let g:ctrlp_max_height=15
-    let g:ctrlp_match_window_reversed=0
-    let g:ctrlp_mruf_max=500
-    let g:ctrlp_follow_symlinks=1
-    " 如果安装了ag, 使用ag
-    " if executable('ag')
-        " " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-        " " let g:ctrlp_user_command = 'ag %s -l --nocolor -f -U -g ""'
-        " " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
-
-        " " ag is fast enough that CtrlP doesn't need to cache
-        " let g:ctrlp_use_caching = 0
-    " endif
-
-    " ctrlpfunky
-    " ctrlp插件1 - 不用ctag进行函数快速跳转
-    nnoremap <Leader>fu :CtrlPFunky<Cr>
-    " narrow the list down with a word under cursor
-    nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
-    let g:ctrlp_funky_syntax_highlight = 1
-
-    let g:ctrlp_extensions = ['funky']
+"    let g:ctrlp_map = '<leader>p'
+"    let g:ctrlp_cmd = 'CtrlP'
+   " map <leader>f :CtrlPMRU<CR>
+"
+"    " 无法找到在配置对象写法下的忽略node_modules的写法，故注释
+"    " let g:ctrlp_custom_ignore = {
+"      " \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+"      " \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
+"      " \ }
+"    let g:ctrlp_custom_ignore = '\v[\/](coverage|node_modules|target|dist|env|build)|(\.(swp|ico|git|svn))$'
+"
+"    let g:ctrlp_working_path_mode=0
+"    let g:ctrlp_match_window_bottom=1
+"    let g:ctrlp_max_height=15
+"    let g:ctrlp_match_window_reversed=0
+"    let g:ctrlp_mruf_max=500
+"    let g:ctrlp_follow_symlinks=1
+"    " 如果安装了ag, 使用ag
+"    " if executable('ag')
+"        " " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+"        " " let g:ctrlp_user_command = 'ag %s -l --nocolor -f -U -g ""'
+"        " " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+"
+"        " " ag is fast enough that CtrlP doesn't need to cache
+"        " let g:ctrlp_use_caching = 0
+"    " endif
+"
+"    " ctrlpfunky
+"    " ctrlp插件1 - 不用ctag进行函数快速跳转
+"    nnoremap <Leader>fu :CtrlPFunky<Cr>
+"    " narrow the list down with a word under cursor
+"    nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+"    let g:ctrlp_funky_syntax_highlight = 1
+"
+"    let g:ctrlp_extensions = ['funky']
 " }}}
 
 
 " ctrlsf {{{
     let g:ctrlsf_ackprg = 'ag'
-    nmap \ <Plug>CtrlSFCwordPath<CR>
-    let g:ctrlsf_ignore_dir = ["node_modules","env"]
+    " nmap \ <Plug>CtrlSFCwordPath<CR>
+    let g:ctrlsf_ignore_dir = ["coverage","node_modules","env","build","dist"]
     " let g:ctrlsf_position = 'below'
     " let g:ctrlsf_winsize = '30%'
     let g:ctrlsf_auto_close = 0
@@ -613,6 +787,27 @@ call plug#end()
         \ "pquit" : "q",
         \ }
 " }}}
+
+" clap{{{
+    " let g:clap_theme = 'atom_dark.vim'
+    " let g:clap_theme = 'material_design_dark.vim'
+    " let g:clap_theme = 'nord.vim'
+    " let g:clap_theme = 'onehalfdark.vim'
+    " let g:clap_theme = 'onehalflight.vim'
+    let g:clap_theme = 'solarized_dark.vim'
+    " let g:clap_theme = 'solarized_light.vim'
+
+    map <leader>f :Clap history<CR>
+    map <leader>p :Clap files<CR>
+    nmap \ :Clap grep ++query=<cword><CR>
+    vmap \ :Clap grep ++query=@visual<CR>
+    let g:clap_layout = { 'relative': 'editor','width': '95%',  'row': '30%', 'col': '5%' }
+    let g:clap_provider_tags_force_vista = 1
+    let g:clap_preview_direction = "UD"
+
+
+" }}}
+
 
 " git.  git操作还是习惯命令行,vim里面处理简单diff编辑操作
 
@@ -645,7 +840,7 @@ call plug#end()
 
 " airline {{{
     " on macvim has bug
-    " let g:airline_powerline_fonts = 1
+    let g:airline_powerline_fonts = 1
 
     if !exists('g:airline_symbols')
         let g:airline_symbols = {}
@@ -716,26 +911,92 @@ call plug#end()
 
 " ################### 快速导航 ###################
 
-" nerdtree nerdtreetabs {{{
-    map <leader>n :NERDTreeToggle<CR>
-    let NERDTreeHighlightCursorline=1
-    let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$', '^\.svn$', '^\.hg$' ]
-    "close vim if the only window left open is a NERDTree
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | end
-    " s/v 分屏打开文件
-    let g:NERDTreeMapOpenSplit = 's'
-    let g:NERDTreeMapOpenVSplit = 'v'
+" " nerdtree nerdtreetabs {{{
+"     map <leader>n :NERDTreeToggle<CR>
+"     let NERDTreeHighlightCursorline=1
+"     let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$', '^\.svn$', '^\.hg$' ]
+"     " s/v 分屏打开文件
+"     let g:NERDTreeMapOpenSplit = 's'
+"     let g:NERDTreeMapOpenVSplit = 'v'
+"
+"     " Exit Vim if NERDTree is the only window remaining in the only tab.
+"     autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+"
+"     " Close the tab if NERDTree is the only window remaining in it.
+"     autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+"
+"     " Open the existing NERDTree on each new tab.
+"     " autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+"
+"     " 关闭同步
+"     " let g:nerdtree_tabs_synchronize_view=0
+"     " let g:nerdtree_tabs_synchronize_focus=0
+"     " 是否自动开启nerdtree
+"     " thank to @ListenerRi, see https://github.com/wklken/k-vim/issues/165
+"     " let g:nerdtree_tabs_open_on_console_startup=0
+"     " let g:nerdtree_tabs_open_on_gui_startup=0
+" " }}}
 
 
-    " nerdtreetabs
-    " map <Leader>n <plug>NERDTreeTabsToggle<CR>
-    " 关闭同步
-    " let g:nerdtree_tabs_synchronize_view=0
-    " let g:nerdtree_tabs_synchronize_focus=0
-    " 是否自动开启nerdtree
-    " thank to @ListenerRi, see https://github.com/wklken/k-vim/issues/165
-    " let g:nerdtree_tabs_open_on_console_startup=0
-    " let g:nerdtree_tabs_open_on_gui_startup=0
+" fern {{{
+
+    " Disable netrw.
+    let g:loaded_netrw  = 1
+    let g:loaded_netrwPlugin = 1
+    let g:loaded_netrwSettings = 1
+    let g:loaded_netrwFileHandlers = 1
+
+    augroup my-fern-hijack
+      autocmd!
+      autocmd BufEnter * ++nested call s:hijack_directory()
+    augroup END
+
+    function! s:hijack_directory() abort
+      let path = expand('%:p')
+      if !isdirectory(path)
+        return
+      endif
+      bwipeout %
+      execute printf('Fern %s', fnameescape(path))
+    endfunction
+
+" Custom settings and mappings.
+let g:fern#disable_default_mappings = 1
+let g:fern#default_hidden = 1
+
+    noremap <silent> <Leader>n :Fern . -drawer -reveal=% -toggle -width=35<CR>
+
+function! FernInit() abort
+  nmap <buffer><expr>
+        \ <Plug>(fern-my-open-expand-collapse)
+        \ fern#smart#leaf(
+        \   "\<Plug>(fern-action-open:select)",
+        \   "\<Plug>(fern-action-expand)",
+        \   "\<Plug>(fern-action-collapse)",
+        \ )
+  nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
+  nmap <buffer> <2-LeftMouse> <Plug>(fern-my-open-expand-collapse)
+  nmap <buffer> n <Plug>(fern-action-new-path)
+  nmap <buffer> d <Plug>(fern-action-remove)
+  nmap <buffer> m <Plug>(fern-action-move)
+  nmap <buffer> M <Plug>(fern-action-rename)
+  nmap <buffer> h <Plug>(fern-action-hidden:toggle)
+  nmap <buffer> r <Plug>(fern-action-reload)
+  nmap <buffer> k <Plug>(fern-action-mark)
+  nmap <buffer> K <Plug>(fern-action-mark-children:leaf)
+  nmap <buffer> b <Plug>(fern-action-open:split)
+  nmap <buffer> v <Plug>(fern-action-open:vsplit)
+  nmap <buffer><nowait> < <Plug>(fern-action-leave)
+  nmap <buffer><nowait> > <Plug>(fern-action-enter)
+endfunction
+
+augroup FernGroup
+  autocmd!
+  autocmd FileType fern setlocal norelativenumber | setlocal nonumber | call FernInit()
+augroup END
+
+let g:fern#renderer = "nerdfont"
+
 " }}}
 
 
@@ -798,6 +1059,26 @@ call plug#end()
         \ 'ctagsbin'  : 'gotags',
         \ 'ctagsargs' : '-sort -silent'
     \ }
+
+    let g:tagbar_type_typescript = {
+      \ 'ctagstype': 'typescript',
+      \ 'kinds': [
+        \ 'c:classes',
+        \ 'n:modules',
+        \ 'f:functions',
+        \ 'v:variables',
+        \ 'v:varlambdas',
+        \ 'm:members',
+        \ 'i:interfaces',
+        \ 'e:enums',
+      \ ]
+    \ }
+
+" }}}
+
+" vista {{{
+    let g:vista_default_executive = 'coc'
+    let g:vista#renderer#enable_icon = 0
 " }}}
 
 
