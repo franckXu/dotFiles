@@ -317,7 +317,8 @@ set wildignore=*.o,*~,*.pyc,*.class,*.swp,*.bak,.svn
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " 回车即选中当前项
-inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+" 禁用，因与coc.nvim冲突
+" inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
 
 " In the quickfix window, <CR> is used to jump to the error under the
 " cursor, so undefine the mapping there.
@@ -670,8 +671,12 @@ endif
 if has("gui_running")
     set guifont=Monaco:h14
     if has("win32") || has("win64")
-        set guifont=Consolas:h12
-        set guifont=Cascadia_Code:h12
+        " set guifont=Consolas:h12
+        " set guifont=Cascadia_Code_PL:h12:cANSI:qDRAFT
+        set guifont=CaskaydiaCove_NFM:h14:cANSI:qDRAFT
+        " set https://github.com/microsoft/cascadia-code/issues/266#issuecomment-628753181
+        " set https://github.com/tonsky/FiraCode/issues/462#issue-245133422
+        set renderoptions=type:directx,level:0.75,gamma:1.25,contrast:0.25,geom:1,renmode:5,taamode:1
     elseif has("gui_gtk2")   "GTK2
         set guifont=Monaco\ 12,Monospace\ 12
     endif
@@ -692,7 +697,7 @@ if has("gui_running")
 else
     " theme主题
     set background=dark
-    " set background=light
+    set background=light
     set t_Co=256
 
 endif
@@ -700,7 +705,7 @@ endif
 
 
 " theme主题
-set background=dark
+" set background=dark
 " set t_Co=256
 
 colorscheme solarized
@@ -727,3 +732,4 @@ highlight SpellLocal term=underline cterm=underline
 " set the default size of new windows
 set lines=40
 set columns=200
+
