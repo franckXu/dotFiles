@@ -153,6 +153,7 @@ Plug 'tomasr/molokai'
 Plug 'lambdalisue/fern.vim', { 'branch': 'main' }
 Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/nerdfont.vim'
+Plug 'ryanoasis/vim-devicons'
 
 " ctrlspace
 Plug 'szw/vim-ctrlspace'
